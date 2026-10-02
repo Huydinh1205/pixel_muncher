@@ -1,0 +1,14 @@
+# systemd user service: keeps the GUI running after you log out.
+# Assumes the repo is cloned to ~/pixel-muncher-gui. Edit the two paths if not.
+[Unit]
+Description=Pixel Muncher GUI
+After=network-online.target
+
+[Service]
+WorkingDirectory=%h/pixel-muncher-gui
+ExecStart=%h/pixel-muncher-gui/run.sh
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

@@ -1,0 +1,54 @@
+# Local test on your own computer (Mac or Linux, no NVIDIA GPU needed).
+# Start with:  ./run.sh --local
+#
+# - Tiling is REAL: gdal2tiles from GDAL, on your own .tif files.
+# - Classification is FAKE: mock/fake_inference.py colours pixels by greenness.
+#   Real Pixel Muncher needs the CUDA GPU workstation.
+#
+# Put each orthomosaic in its own project folder:  local_data/<Project>/<file>.tif
+
+app:
+  title: Pixel Muncher (local test)
+  host: 127.0.0.1          # only this computer can open it
+  port: 8080
+  state_dir: local_state
+  mock: true
+
+data:
+  root: local_data
+  scan_depth: 2
+  min_free_gb: 5
+
+tiling:
+  python: auto                            # the Python running the app (needs GDAL)
+  script: module:osgeo_utils.gdal2tiles   # same tool as gdal2tiles.py
+  zoom: 23
+  tile_size: 512
+  processes: 4
+  nodata: 0
+  resampling: near
+  webviewer: all
+  exclude_transparent: true
+
+inference:
+  workdir: demo_pxm/pixel_muncher
+  python: auto
+  script: ../../mock/fake_inference.py
+  models_dir: demo_pxm/models
+  postprocessing: post_processing_configurations/SegmentationRGBOnly.json
+  results_dir: demo_pxm/pixel_muncher/results
+  output_subfolder: segmentation_rgb
+  log_name: log.log
+  threshold_key: pytorchseg_confidence_threshold
+  extra_args: []
+  require_gpu: false
+
+results:
+  layout: per_run
+
+models:
+  recommended: unet_demo_best
+  notes:
+    unet_demo_prototype: Demo placeholder. Prototype model.
+    unet_demo_best: Demo placeholder. The recommended model is preselected like this.
+    segformer_demo: Demo placeholder. A second architecture.

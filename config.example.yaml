@@ -1,0 +1,56 @@
+# Pixel Muncher GUI - production configuration TEMPLATE
+#
+#   cp config.example.yaml config.yaml
+#
+# then fill in the paths for your GPU workstation. config.yaml is git-ignored:
+# it holds internal paths and user names and must never be pushed.
+# Take the real values from the processing manual (Chapter 8) and the command
+# notes kept on the workstation.
+# "~" is expanded to the home folder of the user running the app.
+# Relative paths are resolved against the folder this file lives in.
+
+app:
+  title: Pixel Muncher
+  host: 0.0.0.0            # 0.0.0.0 = reachable from other PCs on the LAN
+  port: 8080
+  state_dir: ~/.pxm_gui    # job database and per-job log files
+  mock: false              # true = use the fake tiler / inference in ./mock
+
+data:
+  root: ~/data             # folder that holds the project folders (<Project>/<ortho>.tif)
+  scan_depth: 2            # how many folder levels to search for .tif files
+  min_free_gb: 20          # warn if less free disk than this
+
+tiling:                    # Manual 8.4.2
+  python: /home/<user>/<tiling-env>/bin/python3
+  script: /home/<user>/<tiling-env>/bin/gdal2tiles.py   # or: module:osgeo_utils.gdal2tiles
+  zoom: 23
+  tile_size: 512
+  processes: 16
+  nodata: 0
+  resampling: near
+  webviewer: all
+  exclude_transparent: true
+
+inference:                 # Manual 8.4.3 - 8.4.5
+  workdir: ~/<pixel-muncher-folder>
+  python: ~/<pixel-muncher-folder>/<inference-env>/bin/python3
+  script: inference.py
+  models_dir: ~/<models-folder>
+  postprocessing: post_processing_configurations/SegmentationRGBOnly.json
+  results_dir: ~/<pixel-muncher-folder>/results
+  output_subfolder: segmentation_rgb   # folder inside each results run to keep
+  log_name: log.log
+  threshold_key: pytorchseg_confidence_threshold
+  extra_args: []           # extra inference.py flags, e.g. ["-nrd"]
+  require_gpu: true
+
+results:
+  # per_run : <Project>_Result/<date>_<model>_<confidence>/23/   (default, never overwrites)
+  # manual  : <Project>_Result/23/                                (exactly as Manual 8.4.6)
+  layout: per_run
+
+models:
+  recommended: <name-of-best-model-json-without-.json>
+  notes:                   # optional text shown under the model picker
+    <model-name>: Short description analysts will see.

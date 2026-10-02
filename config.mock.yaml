@@ -1,0 +1,49 @@
+# Demo configuration: runs the whole workflow with fake tools, no GPU needed.
+# Start with:  ./run.sh --mock
+# Paths are relative to this file. "auto" python = the Python running the app.
+
+app:
+  title: Pixel Muncher (demo)
+  host: 127.0.0.1
+  port: 8080
+  state_dir: demo_state
+  mock: true
+
+data:
+  root: demo_data
+  scan_depth: 2
+  min_free_gb: 1
+
+tiling:
+  python: auto
+  script: mock/fake_gdal2tiles.py
+  zoom: 23
+  tile_size: 256
+  processes: 4
+  nodata: 0
+  resampling: near
+  webviewer: all
+  exclude_transparent: true
+
+inference:
+  workdir: demo_pxm/pixel_muncher
+  python: auto
+  script: ../../mock/fake_inference.py
+  models_dir: demo_pxm/models
+  postprocessing: post_processing_configurations/SegmentationRGBOnly.json
+  results_dir: demo_pxm/pixel_muncher/results
+  output_subfolder: segmentation_rgb
+  log_name: log.log
+  threshold_key: pytorchseg_confidence_threshold
+  extra_args: []
+  require_gpu: false
+
+results:
+  layout: per_run
+
+models:
+  recommended: unet_demo_best
+  notes:
+    unet_demo_prototype: Demo placeholder. Prototype model.
+    unet_demo_best: Demo placeholder. The recommended model is preselected like this.
+    segformer_demo: Demo placeholder. A second architecture.

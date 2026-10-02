@@ -1,0 +1,141 @@
+# =============================================================================
+# Pixel Muncher GUI - files that must never be pushed
+#
+# .gitignore only stops untracked FILES. Words typed into tracked files (a
+# company name, an IP address, a password) are caught by the pre-commit check:
+#   cp tools/secret-patterns.example .secret-patterns.local
+#   bash tools/install_git_hook.sh
+# If a file was committed before it was ignored, untrack it with
+#   git rm --cached <file>
+# and remember it is still in the history until the history is rewritten.
+# =============================================================================
+
+# --- 1. Real configuration: internal paths, user names, model registry -------
+config.yaml
+config.site.yaml
+config.*.local.yaml
+*.local.yaml
+!config.local.yaml
+.env
+.env.*
+*.env
+
+# --- 2. Credentials and access ----------------------------------------------
+.secret-patterns.local
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.kdbx
+*.rdp
+.azure/
+*.publishsettings
+*azure*credentials*
+*connection*string*
+*.sas
+*.token
+credentials*
+secrets*
+!tools/secret-patterns.example
+
+# --- 3. Client and survey data -------------------------------------------------
+*.tif
+*.tiff
+*.TIF
+*.TIFF
+*.jp2
+*.ecw
+*.las
+*.laz
+*.e57
+*.ply
+*.obj
+*.dae
+*.kml
+*.kmz
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.gpkg
+*.geojson
+*.csv
+*.obs
+*.nav
+*.[0-9][0-9][oOnNgG]
+*.rnx
+*.sbet
+*.graw
+*.gpro
+*.psx
+*.files/
+RAW/
+raw/
+data/
+*_Result/
+results/
+23/
+23_previous_*/
+
+# --- 4. Models and model output -----------------------------------------------
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.h5
+*.safetensors
+*.weights
+models/
+segmentation_rgb*/
+validation_rgb_results.json
+log.log
+run_manifest.json
+
+# --- 5. Company documents --------------------------------------------------------
+*.docx
+*.doc
+*.pdf
+*.xlsx
+*.xls
+*.pptx
+Instructions*notes*.txt
+*Processing*Instructions*
+
+# --- 6. App runtime state: job history, logs, demo/test data ------------------
+.pxm_gui/
+demo_data/
+demo_state/
+demo_pxm/
+local_data/
+local_state/
+*.sqlite3
+*.sqlite3-*
+*.db
+*.log
+
+# --- 7. Builds and archives ---------------------------------------------------------
+*.zip
+*.tar
+*.tar.gz
+*.7z
+_old_zips/
+Pixel Muncher.app/
+dist/
+build/
+
+# --- 8. Python and editors --------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
